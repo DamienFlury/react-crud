@@ -12,7 +12,7 @@ const UserForm: React.FC<Props> = ({ onSubmit }) => {
   const [active, setActive] = useState(false);
   return (
     <div>
-      <h1>Form</h1>
+      <h2>New User</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();

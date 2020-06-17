@@ -2,6 +2,29 @@ import React, { useState } from 'react';
 import { User } from '../types/User';
 import UserIndex from '../components/users/UserIndex';
 import UserForm from './UserForm';
+import styled from 'styled-components';
+
+const Dialog = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.7);
+`;
+
+const FormWrapper = styled.div`
+  max-width: 860px;
+  padding: 20px;
+  background-color: #ffffff;
+  position: absolute;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  left: 50%;
+  width: 100%;
+  border-radius: 4px;
+`;
 
 let id = 4;
 
@@ -30,17 +53,32 @@ const Users: React.FC = () => {
     },
   ]);
 
+  const [open, setOpen] = useState(false);
+
+  console.log('RENDER');
+
   const handleDelete = (id: number) => {
     setUsers(users.filter((u) => u.id !== id));
   };
+
+  const handleSubmit = (user: Omit<User, 'id'>) => {
+    setUsers((prev) => [...prev, { ...user, id: id++ }]);
+    setOpen(false);
+  }
+
   return (
     <div>
       <h1>Users</h1>
-      <UserForm
-        onSubmit={(user) => {
-          setUsers((prev) => [...prev, { ...user, id: id++ }]);
-        }}
-      />
+      {open && (
+        <Dialog onClick={() => setOpen(false)}>
+          <FormWrapper onClick={e => e.stopPropagation()}>
+            <UserForm
+              onSubmit={handleSubmit}
+            />
+          </FormWrapper>
+        </Dialog>
+      )}
+      <button onClick={() => setOpen((prev) => !prev)}>Create User</button>
       <UserIndex users={users} onDelete={handleDelete} />
     </div>
   );
