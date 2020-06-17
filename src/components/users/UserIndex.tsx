@@ -5,6 +5,7 @@ import styled from 'styled-components';
 type Props = {
   users: User[];
   onDelete: (id: number) => void;
+  onEdit: (id: number) => void;
 };
 
 const TableCell = styled.td`
@@ -17,17 +18,14 @@ const Paper = styled.div`
   border-radius: 4px;
 `;
 
-const UserIndex: React.FC<Props> = ({ users, onDelete }) => {
-  const handleDelete = (id: number) => {
-    onDelete(id)
-  };
+const UserIndex: React.FC<Props> = ({ users, onDelete, onEdit }) => {
 
   return (
     <Paper>
     <table>
       <thead>
         <tr>
-          <th>Id</th>
+          <th>Id</ th>
           <th>Forename</th>
           <th>Surname</th>
           <th>Birthday</th>
@@ -42,9 +40,12 @@ const UserIndex: React.FC<Props> = ({ users, onDelete }) => {
             <TableCell>{user.forename}</TableCell>
             <TableCell>{user.surname}</TableCell>
             <TableCell>{user.birthday}</TableCell>
-            <TableCell>{user.active.toString()}</TableCell>
             <TableCell>
-              <button onClick={() => handleDelete(user.id)}>Delete</button>
+              <input type="checkbox" checked={user.active} disabled />
+            </TableCell>
+            <TableCell>
+              <button onClick={() => onDelete(user.id)}>Delete</button>
+              <button onClick={() => onEdit(user.id)}>Update</button>
             </TableCell>
           </tr>
         ))}
